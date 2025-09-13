@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "django-modern-migration-fixer"
-version = "0.1.0"
+version = "0.1.2"
 description = "Fix conflicting Django migrations (numbered) with robust git + worktree support"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,7 +26,8 @@ classifiers = [
   "Topic :: Software Development :: Build Tools",
 ]
 dependencies = [
-  "Django>=4.2",
+  # Pin to a stable minor to keep tests deterministic
+  "Django>=5.2,<5.3",
 ]
 
 [project.urls]

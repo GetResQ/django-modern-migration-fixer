@@ -122,8 +122,11 @@ class Command(BaseCommand):
                     candidates = [
                         f"{self.remote}/{self.default_branch}",
                         f"{self.remote}/HEAD",
+                        # Try common default-branch names explicitly as fallbacks
+                        f"{self.remote}/main",
                         f"{self.remote}/master",
                         self.default_branch,
+                        "main",
                         "master",
                     ]
                     default_sha = None

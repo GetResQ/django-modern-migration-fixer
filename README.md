@@ -1,5 +1,7 @@
 # django-modern-migration-fixer
 
+[![CI](https://github.com/getresq/django-modern-migration-fixer/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/getresq/django-modern-migration-fixer/actions/workflows/ci.yml)
+
 Fix conflicting Django migrations (numbered styles) using plain git CLI, with robust support for normal repos and git worktrees. No GitPython dependency.
 
 This is a fork and drop-in replacement for [django-migration-fixer](https://github.com/tj-django/django-migration-fixer) which is not actively maintained by the author.
@@ -58,15 +60,6 @@ Examples:
 
 - Only supports numbered migration file names (e.g., `0001_initial`). Non-numbered names fail fast with a clear message.
 - Cross-app dependency rewrites beyond simple renumbering are out of scope.
-
-## Development
-
-```bash
-uv sync --extra dev
-uv run ruff check --fix . && uv run ruff format .
-uv run -m unittest
-uv build && uvx twine check dist/*
-```
 
 ## Make targets
 

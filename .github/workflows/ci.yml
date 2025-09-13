@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ '**' ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-tests:
+    name: Lint and Tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ '3.10', '3.11', '3.12', '3.13' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Sync dependencies (dev)
+        run: uv sync --extra dev
+
+      - name: Ruff (lint)
+        run: uv run --python ${{ matrix.python-version }} ruff check --output-format=github .
+
+      - name: Run tests (unit + e2e)
+        env:
+          UV_PY: ${{ matrix.python-version }}
+        run: make tests
+
+  build-dist:
+    name: Build & Twine Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Sync dependencies (dev)
+        run: uv sync --extra dev
+
+      - name: Build package
+        run: uv build
+
+      - name: Twine check
+        run: uv run --python 3.12 twine check dist/*
