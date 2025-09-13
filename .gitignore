@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.python-version
+.DS_Store
+dist/
+build/
+.venv/
+.ruff_cache/
+.mypy_cache/
+uv.lock
+
